@@ -3,7 +3,7 @@
 
 
 
-## Установка (docker compose)
+## Установка 
 1. Клонирование репозитория
 
 ```git clone https://github.com/Xapsiel/EM```
