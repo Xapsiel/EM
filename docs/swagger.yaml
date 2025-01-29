@@ -1,0 +1,260 @@
+basePath: /
+definitions:
+  handler.Song:
+    properties:
+      group:
+        type: string
+      song:
+        type: string
+    type: object
+  handler.errorResponse:
+    properties:
+      message:
+        example: error description
+        type: string
+      status:
+        example: fail
+        type: string
+    type: object
+  handler.resultResponse:
+    properties:
+      id:
+        example: 1
+        type: integer
+      status:
+        example: success
+        type: string
+      text:
+        example: description
+        type: string
+    type: object
+  model.Song:
+    properties:
+      group_name:
+        example: Muse
+        type: string
+      id:
+        example: 1
+        type: integer
+      link:
+        example: https://www.youtube.com/watch?v=Xsp3_a-PMTw
+        type: string
+      releaseDate:
+        example: 19.07.2006
+        type: string
+      song_name:
+        example: Supermassive Black Hole
+        type: string
+      text:
+        example: |-
+          Ooh baby, don't you know I suffer?
+          Ooh baby, can you hear me moan?
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is an API for managing songs.
+  title: Songs API
+  version: "1.0"
+paths:
+  /info:
+    get:
+      consumes:
+      - application/json
+      description: Получение списка песен из базы данных с фильтрацией по параметрам
+      parameters:
+      - default: Supermassive Black Hole
+        description: Название песни
+        in: query
+        name: song
+        type: string
+      - default: Muse
+        description: Группа
+        in: query
+        name: group
+        type: string
+      - default: https://www.youtube.com/watch?v=Xsp3_a-PMTw
+        description: Ссылка на клип
+        in: query
+        name: link
+        type: string
+      - default: Ooh baby, don't you know I suffer?\nOoh baby, can my soul alight
+        description: Текст песни
+        in: query
+        name: text
+        type: string
+      - description: Дата публикации
+        example: 19.07.2006
+        in: query
+        name: date
+        type: string
+      - default: 1
+        description: Номер страницы
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Количество на странице
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Song'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Получение списка песен
+      tags:
+      - songs
+  /info/verse:
+    get:
+      consumes:
+      - application/json
+      description: Получение текста конкретного куплета
+      parameters:
+      - default: Supermassive Black Hole
+        description: Название песни
+        in: query
+        name: song
+        type: string
+      - default: Muse
+        description: Группа
+        in: query
+        name: group
+        type: string
+      - default: 1
+        description: Номер куплета
+        in: query
+        name: verse
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.resultResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Получение текста куплета песни
+      tags:
+      - songs
+  /songs:
+    delete:
+      consumes:
+      - application/json
+      description: Удаление песни по ID, названию или группе
+      parameters:
+      - description: Данные песни для удаления
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/model.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.resultResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Удаление песни
+      tags:
+      - songs
+    post:
+      consumes:
+      - application/json
+      description: Добавление новой песни в базу данных (Обязательные параметры -
+        song, group)
+      parameters:
+      - description: Данные песни
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/handler.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.resultResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Добавление новой песни
+      tags:
+      - songs
+    put:
+      consumes:
+      - application/json
+      description: Обновление данных о песне
+      parameters:
+      - default: Supermassive Black Hole
+        description: Название песни
+        in: query
+        name: song
+        type: string
+      - default: Muse
+        description: Группа
+        in: query
+        name: group
+        type: string
+      - description: Данные песни для обновления
+        in: body
+        name: song
+        required: true
+        schema:
+          $ref: '#/definitions/model.Song'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.resultResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Обновление информации о песне
+      tags:
+      - songs
+swagger: "2.0"
