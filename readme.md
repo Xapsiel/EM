@@ -10,11 +10,5 @@
 
 2. Переходим в директорию репозитория.
 
-```cd Test_Case_EM```
-
-3. Передаем в docker-compose.yaml переменные окружения
-
-4. Запуск docker compose файла
-
-```docker compose up```
+```cd EM```
 
